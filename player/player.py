@@ -1,5 +1,6 @@
 class Player:
     def __init__(self,width,height):
+        self.hp = 100
         self.width = width
         self.height = height
         self.x= self.width//2

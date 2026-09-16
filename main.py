@@ -2,7 +2,7 @@ import pygame
 from game.game import Game
 from player.player import Player
 from player.move_player import move_player, player_can_not_go_off_screen
-from Enemy.enemy import create_enemy, move_enemy_to_player
+from Enemy.enemy import create_enemy, move_enemy_to_player,enemy_collider_with_player,bool_collider
 
 def main():
     games = Game()
@@ -15,7 +15,7 @@ def main():
     r = pygame.Rect(player.x, player.y, 50, 50)
     r.center = (player.x, player.y)
     enemy = create_enemy()
-    move_enemy_to_player(enemy,r)
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -25,6 +25,9 @@ def main():
         pygame.draw.rect(screen, "black", r)
         pygame.draw.rect(screen, "red", enemy)
         player_can_not_go_off_screen(screen,r)
+        move_enemy_to_player(enemy, r)
+        value = enemy_collider_with_player(enemy,r)
+        print(bool_collider(value,player))
         pygame.display.flip()
         clock.tick(60)
 
