@@ -35,4 +35,7 @@ def bool_collider(value,player):
     if value:
         player.hp = player.hp -5
         if player.hp <= 0:
-            return "Game Over"
+            return True
+        else:
+            return False
+

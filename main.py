@@ -15,22 +15,40 @@ def main():
     r = pygame.Rect(player.x, player.y, 50, 50)
     r.center = (player.x, player.y)
     enemy = create_enemy()
-
+    last_damage_time = pygame.time.get_ticks()
+    damage_cooldown = 500
+    font = pygame.font.SysFont("Arial", 50)
+    output = font.render("Game over!", True, (255, 255, 255))
+    text_rect = output.get_rect(center = screen.get_rect().center)
+    game_over = False
     while running:
+        current_time = pygame.time.get_ticks()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        screen.fill("white")
-        move_player(r)
-        pygame.draw.rect(screen, "black", r)
-        pygame.draw.rect(screen, "red", enemy)
-        player_can_not_go_off_screen(screen,r)
-        move_enemy_to_player(enemy, r)
-        value = enemy_collider_with_player(enemy,r)
-        print(bool_collider(value,player))
+        if not game_over:
+            screen.fill("white")
+            move_player(r)
+            pygame.draw.rect(screen, "black", r)
+            pygame.draw.rect(screen, "red", enemy)
+            player_can_not_go_off_screen(screen,r)
+            move_enemy_to_player(enemy, r)
+            value = enemy_collider_with_player(enemy,r)
+
+            how_much_time_has_passed = (current_time - last_damage_time)
+
+            if value and how_much_time_has_passed >= damage_cooldown:
+                collider = bool_collider(value, player)
+                last_damage_time = current_time
+                if collider:
+                    game_over = True
+                else:
+                    print("tracisz - 5 hp")
+        else:
+            screen.fill("black")
+            screen.blit(output, text_rect)
         pygame.display.flip()
         clock.tick(60)
-
     pygame.quit()
 
 if __name__ == "__main__":
